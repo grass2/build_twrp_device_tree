@@ -1,10 +1,10 @@
-name: 生成TWRP设备树
+name: Generate TWRP device tree
 
 on:
   workflow_dispatch:
     inputs:
       PY:
-        description: 'Python3版本（推荐3.6/3.9）'
+        description: 'Python 3 version (3.6/3.9 recommended)）'
         required: true
         default: '3.9'
       IMG:
@@ -18,29 +18,29 @@ jobs:
       - name: Check Out
         uses: actions/checkout@v3
 
-      - name: 准备环境
+      - name: Prepare the environment
         run: |
           sudo apt update
           sudo apt -y install cpio wget
 
-      - name: 准备Python3
+      - name: Prepare Python3
         uses: actions/setup-python@v4
         with:
           python-version: ${{ github.event.inputs.PY }}
           cache: 'pip'
           
-      - name: 准备twrpdtgen
+      - name: Prepare twrpdtgen
         run: pip3 install -r requirements.txt
         
-      - name: 下载
+      - name: download img
         run: wget ${{ github.event.inputs.IMG }}
         
-      - name: 跑
+      - name: run
         run: |
           mkdir out
           python3 -m twrpdtgen -o ./out/ *.img
           
-      - name: 打压缩包
+      - name: Compress the package
         run: |
           cd ./out
           zip -r -9 DeviceTree.zip ./*
